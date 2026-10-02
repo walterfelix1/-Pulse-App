@@ -413,6 +413,16 @@
     alert("You have logged out.");
     showScreen("home", document.querySelector("nav button"));
   }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const SUPABASE_URL = "https://hifggxfzjbtsjpqhconv.supabase.co/rest/v1/";
+  const SUPABASE_KEY = "sb_publishable_VBtr_LcUsMKEglxDC9M_7w_Lde0mdun";
+
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 </script>
 
 </body>
