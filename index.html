@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulse</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    header {
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid #222;
+      position: sticky;
+      top: 0;
+      background: #000;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    .logo span {
+      color: #ff1744;
+    }
+
+    .screen {
+      display: none;
+      min-height: calc(100vh - 120px);
+      padding: 20px;
+      padding-bottom: 90px;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .welcome {
+      text-align: center;
+      padding-top: 70px;
+    }
+
+    .welcome h1 {
+      font-size: 42px;
+      margin-bottom: 15px;
+    }
+
+    .welcome h1 span {
+      color: #ff1744;
+    }
+
+    .welcome p {
+      color: #aaa;
+      font-size: 17px;
+      line-height: 1.5;
+    }
+
+    .card {
+      background: #151515;
+      border-radius: 18px;
+      padding: 20px;
+      margin-top: 25px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      background: #222;
+      color: white;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 12px;
+      font-size: 16px;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 13px 18px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: #ff1744;
+      color: white;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .secondary {
+      background: #292929;
+      color: white;
+      margin-top: 10px;
+    }
+
+    .upload-box {
+      border: 2px dashed #444;
+      border-radius: 16px;
+      padding: 30px 15px;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .feed-card {
+      background: #111;
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 25px;
+      border: 1px solid #222;
+    }
+
+    .video-placeholder {
+      height: 430px;
+      background: linear-gradient(135deg, #171717, #303030);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 70px;
+    }
+
+    .feed-info {
+      padding: 15px;
+    }
+
+    .username {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .caption {
+      color: #ccc;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .actions button {
+      background: #222;
+      color: white;
+    }
+
+    .profile-box {
+      text-align: center;
+      padding-top: 35px;
+    }
+
+    .avatar {
+      width: 90px;
+      height: 90px;
+      background: #ff1744;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+      font-size: 35px;
+      font-weight: bold;
+    }
+
+    .profile-box h2 {
+      margin-top: 15px;
+    }
+
+    .profile-box p {
+      color: #888;
+      margin-top: 7px;
+    }
+
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 65px;
+      background: #111;
+      border-top: 1px solid #292929;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 20;
+    }
+
+    nav button {
+      background: transparent;
+      color: #aaa;
+      font-size: 13px;
+      padding: 8px;
+    }
+
+    nav button.active {
+      color: #ff1744;
+    }
+
+    .plus {
+      background: #ff1744 !important;
+      color: white !important;
+      border-radius: 50% !important;
+      width: 48px;
+      height: 48px;
+      font-size: 24px !important;
+      padding: 0 !important;
+    }
+
+    #message {
+      text-align: center;
+      margin-top: 15px;
+      color: #ff1744;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">PUL<span>S</span>E</div>
+</header>
+
+<!-- HOME -->
+<section id="home" class="screen active">
+  <div class="welcome">
+    <h1>Welcome to <span>Pulse</span> 🔥</h1>
+    <p>Create, watch and share short videos.</p>
+  </div>
+
+  <div class="feed-card">
+    <div class="video-placeholder">▶️</div>
+    <div class="feed-info">
+      <div class="username">@pulseuser</div>
+      <div class="caption">Welcome to Pulse! Your short-video world starts here. 🔥</div>
+
+      <div class="actions">
+        <button onclick="likePost(this)">❤️ 0</button>
+        <button onclick="commentPost()">💬 Comment</button>
+        <button onclick="sharePost()">↗️ Share</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEARCH -->
+<section id="search" class="screen">
+  <h2>Search 🔎</h2>
+
+  <div class="card">
+    <input type="text" id="searchInput" placeholder="Search Pulse...">
+    <button class="primary" onclick="searchPulse()">Search</button>
+    <p id="searchResult"></p>
+  </div>
+</section>
+
+<!-- CREATE -->
+<section id="create" class="screen">
+  <h2>Create 🎬</h2>
+
+  <div class="card">
+    <div class="upload-box">
+      <h3>Upload your video</h3>
+      <br>
+
+      <input
+        type="file"
+        id="videoFile"
+        accept="video/*"
+      >
+
+      <textarea
+        id="caption"
+        placeholder="Write a caption..."
+      ></textarea>
+
+      <button class="primary" onclick="uploadVideo()">
+        Upload Video
+      </button>
+
+      <p id="message"></p>
+    </div>
+  </div>
+</section>
+
+<!-- PROFILE -->
+<section id="profile" class="screen">
+  <div class="profile-box">
+    <div class="avatar">P</div>
+
+    <h2>@pulseuser</h2>
+    <p>Welcome to my Pulse profile 🔥</p>
+
+    <div class="card">
+      <h3>My Pulse</h3>
+      <br>
+      <p>Videos: 0</p>
+      <p>Followers: 0</p>
+      <p>Following: 0</p>
+    </div>
+
+    <button class="secondary" onclick="logout()">
+      Log Out
+    </button>
+  </div>
+</section>
+
+<!-- NAVIGATION -->
+<nav>
+  <button onclick="showScreen('home', this)" class="active">🏠<br>Home</button>
+
+  <button onclick="showScreen('search', this)">🔎<br>Search</button>
+
+  <button onclick="showScreen('create', this)" class="plus">+</button>
+
+  <button onclick="showScreen('profile', this)">👤<br>Profile</button>
+</nav>
+
+<script>
+  function showScreen(screenName, button) {
+    document.querySelectorAll('.screen').forEach(screen => {
+      screen.classList.remove('active');
+    });
+
+    document.getElementById(screenName).classList.add('active');
+
+    document.querySelectorAll('nav button').forEach(btn => {
+      btn.classList.remove('active');
+    });
+
+    button.classList.add('active');
+  }
+
+  function likePost(button) {
+    let current = parseInt(button.innerText.match(/\d+/)[0]);
+    current++;
+    button.innerText = "❤️ " + current;
+  }
+
+  function commentPost() {
+    const comment = prompt("Write your comment:");
+
+    if (comment) {
+      alert("Comment added: " + comment);
+    }
+  }
+
+  function sharePost() {
+    if (navigator.share) {
+      navigator.share({
+        title: "Pulse",
+        text: "Check out this video on Pulse!"
+      });
+    } else {
+      alert("Share link copied!");
+    }
+  }
+
+  function searchPulse() {
+    const value = document.getElementById("searchInput").value.trim();
+
+    if (value === "") {
+      document.getElementById("searchResult").innerText =
+        "Type something to search.";
+      return;
+    }
+
+    document.getElementById("searchResult").innerText =
+      "Searching Pulse for: " + value;
+  }
+
+  function uploadVideo() {
+    const file = document.getElementById("videoFile").files[0];
+    const caption = document.getElementById("caption").value;
+
+    const message = document.getElementById("message");
+
+    if (!file) {
+      message.innerText = "Please choose a video first.";
+      return;
+    }
+
+    message.innerText =
+      "Video selected successfully! 🔥 Your Pulse upload system is ready for the next step.";
+
+    console.log("Video:", file.name);
+    console.log("Caption:", caption);
+  }
+
+  function logout() {
+    alert("You have logged out.");
+    showScreen("home", document.querySelector("nav button"));
+  }
+</script>
+
+</body>
+</html>
