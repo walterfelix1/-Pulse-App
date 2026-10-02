@@ -1,1375 +1,1026 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Pulse</title>
-
-
-  <style>
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-
-    body {
-      font-family: Arial, sans-serif;
-      background: #000;
-      color: #fff;
-      min-height: 100vh;
-      padding-bottom: 70px;
-    }
-
-
-    header {
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-bottom: 1px solid #222;
-      position: sticky;
-      top: 0;
-      background: #000;
-      z-index: 10;
-    }
-
-
-    .logo {
-      font-size: 28px;
-      font-weight: bold;
-      letter-spacing: 2px;
-    }
-
-
-    .logo span {
-      color: #ff1744;
-    }
-
-
-    .screen {
-      display: none;
-      min-height: calc(100vh - 130px);
-      padding: 20px;
-      padding-bottom: 90px;
-    }
-
-
-    .screen.active {
-      display: block;
-    }
-
-
-    .welcome {
-      text-align: center;
-      padding-top: 50px;
-      padding-bottom: 25px;
-    }
-
-
-    .welcome h1 {
-      font-size: 38px;
-      margin-bottom: 15px;
-    }
-
-
-    .welcome h1 span {
-      color: #ff1744;
-    }
-
-
-    .welcome p {
-      color: #aaa;
-      font-size: 17px;
-      line-height: 1.5;
-    }
-
-
-    .card {
-      background: #151515;
-      border-radius: 18px;
-      padding: 20px;
-      margin-top: 25px;
-    }
-
-
-    input,
-    textarea {
-      width: 100%;
-      background: #222;
-      color: white;
-      border: 1px solid #333;
-      border-radius: 12px;
-      padding: 14px;
-      margin-top: 12px;
-      font-size: 16px;
-      outline: none;
-    }
-
-
-    input:focus,
-    textarea:focus {
-      border-color: #ff1744;
-    }
-
-
-    textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-
-    button {
-      border: none;
-      border-radius: 12px;
-      padding: 13px 18px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-
-    .primary {
-      background: #ff1744;
-      color: white;
-      width: 100%;
-      margin-top: 15px;
-    }
-
-
-    .secondary {
-      background: #292929;
-      color: white;
-      margin-top: 10px;
-      width: 100%;
-    }
-
-
-    .upload-box {
-      border: 2px dashed #444;
-      border-radius: 16px;
-      padding: 30px 15px;
-      text-align: center;
-      margin-top: 20px;
-    }
-
-
-    .feed-card {
-      background: #111;
-      border-radius: 18px;
-      overflow: hidden;
-      margin-bottom: 25px;
-      border: 1px solid #222;
-    }
-
-
-    .video-placeholder {
-      height: 430px;
-      background: linear-gradient(
-        135deg,
-        #171717,
-        #303030
-      );
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 70px;
-    }
-
-
-    .feed-info {
-      padding: 15px;
-    }
-
-
-    .username {
-      font-weight: bold;
-      margin-bottom: 8px;
-      font-size: 18px;
-    }
-
-
-    .caption {
-      color: #ccc;
-      line-height: 1.5;
-    }
-
-
-    .actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 15px;
-    }
-
-
-    .actions button {
-      background: #222;
-      color: white;
-      flex: 1;
-      font-size: 14px;
-    }
-
-
-    .profile-box {
-      text-align: center;
-      padding-top: 35px;
-      max-width: 500px;
-      margin: auto;
-    }
-
-
-    .avatar {
-      width: 90px;
-      height: 90px;
-      background: #ff1744;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: auto;
-      font-size: 35px;
-      font-weight: bold;
-    }
-
-
-    .profile-box h2 {
-      margin-top: 15px;
-    }
-
-
-    .profile-box p {
-      color: #888;
-      margin-top: 7px;
-    }
-
-
-    .auth-box {
-      max-width: 450px;
-      margin: 40px auto;
-      text-align: center;
-    }
-
-
-    .auth-box h2 {
-      font-size: 30px;
-      margin-bottom: 10px;
-    }
-
-
-    .auth-box > p {
-      color: #999;
-      line-height: 1.5;
-      margin-bottom: 20px;
-    }
-
-
-    .auth-message {
-      margin-top: 15px;
-      text-align: center;
-      color: #ff1744 !important;
-      line-height: 1.5;
-    }
-
-
-    .user-email {
-      color: #aaa !important;
-      margin-top: 8px;
-      word-break: break-word;
-    }
-
-
-    #message {
-      text-align: center;
-      margin-top: 15px;
-      color: #ff1744;
-    }
-
-
-    #searchResult {
-      margin-top: 15px;
-      color: #aaa;
-      text-align: center;
-    }
-
-
-    nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 70px;
-      background: #111;
-      border-top: 1px solid #292929;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      z-index: 20;
-    }
-
-
-    nav button {
-      background: transparent;
-      color: #aaa;
-      font-size: 13px;
-      padding: 8px;
-    }
-
-
-    nav button.active {
-      color: #ff1744;
-    }
-
-
-    .plus {
-      background: #ff1744 !important;
-      color: white !important;
-      border-radius: 50% !important;
-      width: 52px;
-      height: 52px;
-      font-size: 27px !important;
-      padding: 0 !important;
-    }
-
-
-    .stats {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid #333;
-    }
-
-
-    .stats div {
-      text-align: center;
-    }
-
-
-    .stats strong {
-      display: block;
-      font-size: 20px;
-    }
-
-
-    .stats span {
-      color: #888;
-      font-size: 13px;
-    }
-
-
-  </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pulse</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Arial,sans-serif;
+  background:#000;
+  color:#fff;
+  min-height:100vh;
+  padding-bottom:75px;
+}
+header{
+  height:60px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-bottom:1px solid #222;
+  position:sticky;
+  top:0;
+  background:#000;
+  z-index:10;
+}
+.logo{
+  font-size:28px;
+  font-weight:bold;
+  letter-spacing:2px;
+}
+.logo span{color:#ff1744}
+.screen{
+  display:none;
+  min-height:calc(100vh - 135px);
+  padding:20px;
+  padding-bottom:90px;
+}
+.screen.active{display:block}
+.welcome{
+  text-align:center;
+  padding:45px 0 25px;
+}
+.welcome h1{
+  font-size:36px;
+  margin-bottom:12px;
+}
+.welcome h1 span{color:#ff1744}
+.welcome p{
+  color:#aaa;
+  font-size:16px;
+}
+.card{
+  background:#151515;
+  border-radius:18px;
+  padding:20px;
+  margin-top:20px;
+}
+input,textarea{
+  width:100%;
+  background:#222;
+  color:white;
+  border:1px solid #333;
+  border-radius:12px;
+  padding:14px;
+  margin-top:12px;
+  font-size:16px;
+  outline:none;
+}
+input:focus,textarea:focus{
+  border-color:#ff1744;
+}
+textarea{
+  min-height:100px;
+  resize:vertical;
+}
+button{
+  border:none;
+  border-radius:12px;
+  padding:13px 18px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.primary{
+  background:#ff1744;
+  color:white;
+  width:100%;
+  margin-top:15px;
+}
+.secondary{
+  background:#292929;
+  color:white;
+  margin-top:10px;
+  width:100%;
+}
+.upload-box{
+  border:2px dashed #444;
+  border-radius:16px;
+  padding:25px 15px;
+  text-align:center;
+}
+.upload-box h3{margin-bottom:10px}
+#videoPreview{
+  display:none;
+  width:100%;
+  max-height:500px;
+  object-fit:contain;
+  background:#000;
+  border-radius:15px;
+  margin-top:20px;
+}
+.feed-card{
+  background:#111;
+  border-radius:18px;
+  overflow:hidden;
+  margin-bottom:25px;
+  border:1px solid #222;
+}
+.feed-video{
+  width:100%;
+  max-height:650px;
+  display:block;
+  background:#000;
+  object-fit:contain;
+}
+.feed-info{
+  padding:15px;
+}
+.username{
+  font-weight:bold;
+  margin-bottom:8px;
+  font-size:18px;
+}
+.caption{
+  color:#ccc;
+  line-height:1.5;
+  white-space:pre-wrap;
+}
+.actions{
+  display:flex;
+  gap:8px;
+  margin-top:15px;
+}
+.actions button{
+  background:#222;
+  color:white;
+  flex:1;
+  font-size:14px;
+}
+.profile-box{
+  text-align:center;
+  padding-top:35px;
+  max-width:500px;
+  margin:auto;
+}
+.avatar{
+  width:90px;
+  height:90px;
+  background:#ff1744;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:auto;
+  font-size:35px;
+  font-weight:bold;
+}
+.profile-box h2{margin-top:15px}
+.profile-box p{
+  color:#888;
+  margin-top:7px;
+}
+.auth-box{
+  max-width:450px;
+  margin:40px auto;
+  text-align:center;
+}
+.auth-box h2{
+  font-size:30px;
+  margin-bottom:10px;
+}
+.auth-box>p{
+  color:#999;
+  line-height:1.5;
+  margin-bottom:20px;
+}
+.auth-message{
+  margin-top:15px;
+  text-align:center;
+  color:#ff1744!important;
+  line-height:1.5;
+}
+.user-email{
+  color:#aaa!important;
+  margin-top:8px;
+  word-break:break-word;
+}
+#message{
+  text-align:center;
+  margin-top:15px;
+  color:#ff1744;
+  line-height:1.5;
+}
+#searchResult{
+  margin-top:15px;
+  color:#aaa;
+  text-align:center;
+}
+.empty{
+  text-align:center;
+  color:#777;
+  padding:40px 15px;
+}
+.loading{
+  text-align:center;
+  color:#aaa;
+  padding:30px;
+}
+nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:70px;
+  background:#111;
+  border-top:1px solid #292929;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:20;
+}
+nav button{
+  background:transparent;
+  color:#aaa;
+  font-size:13px;
+  padding:8px;
+}
+nav button.active{color:#ff1744}
+.plus{
+  background:#ff1744!important;
+  color:white!important;
+  border-radius:50%!important;
+  width:52px;
+  height:52px;
+  font-size:27px!important;
+  padding:0!important;
+}
+.stats{
+  display:flex;
+  justify-content:space-around;
+  margin-top:20px;
+  padding-top:20px;
+  border-top:1px solid #333;
+}
+.stats div{text-align:center}
+.stats strong{
+  display:block;
+  font-size:20px;
+}
+.stats span{
+  color:#888;
+  font-size:13px;
+}
+.file-name{
+  color:#aaa;
+  font-size:14px;
+  margin-top:10px;
+  word-break:break-word;
+}
+</style>
 </head>
-
-
 <body>
-
-
-  <!-- HEADER -->
-
-  <header>
-
-    <div class="logo">
-      PUL<span>S</span>E
-    </div>
-
-  </header>
-
-
-
-  <!-- ========================= -->
-  <!-- HOME -->
-  <!-- ========================= -->
-
-  <section
-    id="home"
-    class="screen active"
+<header>
+  <div class="logo">PUL<span>S</span>E</div>
+</header>
+<!-- HOME -->
+<section id="home" class="screen active">
+  <div class="welcome">
+    <h1>Welcome to <span>Pulse</span> 🔥</h1>
+    <p>Create, watch and share short videos.</p>
+  </div>
+  <div id="feed">
+    <div class="loading">Loading Pulse videos...</div>
+  </div>
+</section>
+<!-- SEARCH -->
+<section id="search" class="screen">
+  <h2>Search 🔎</h2>
+  <div class="card">
+<input
+  type="text"
+  id="searchInput"
+  placeholder="Search Pulse..."
+>
+<button
+  class="primary"
+  onclick="searchPulse()"
+>
+  Search
+</button>
+<p id="searchResult"></p>
+  </div>
+</section>
+<!-- CREATE -->
+<section id="create" class="screen">
+  <h2>Create 🎬</h2>
+  <div class="card">
+<div class="upload-box">
+  <h3>Upload your video</h3>
+  <input
+    type="file"
+    id="videoFile"
+    accept="video/*"
+    onchange="previewVideo()"
   >
-
-    <div class="welcome">
-
-      <h1>
-        Welcome to <span>Pulse</span> 🔥
-      </h1>
-
-      <p>
-        Create, watch and share short videos.
-      </p>
-
-    </div>
-
-
-    <div class="feed-card">
-
-      <div class="video-placeholder">
-        ▶️
-      </div>
-
-
-      <div class="feed-info">
-
-        <div class="username">
-          @pulseuser
-        </div>
-
-
-        <div class="caption">
-
-          Welcome to Pulse!
-          Your short-video world starts here. 🔥
-
-        </div>
-
-
-        <div class="actions">
-
-          <button onclick="likePost(this)">
-            ❤️ 0
-          </button>
-
-
-          <button onclick="commentPost()">
-            💬 Comment
-          </button>
-
-
-          <button onclick="sharePost()">
-            ↗️ Share
-          </button>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-
-  <!-- ========================= -->
-  <!-- SEARCH -->
-  <!-- ========================= -->
-
-  <section
-    id="search"
-    class="screen"
+  <p id="fileName" class="file-name"></p>
+  <video
+    id="videoPreview"
+    controls
+    playsinline
+  ></video>
+  <textarea
+    id="caption"
+    placeholder="Write a caption..."
+  ></textarea>
+  <button
+    class="primary"
+    onclick="uploadVideo()"
   >
-
-    <h2>
-      Search 🔎
-    </h2>
-
-
-    <div class="card">
-
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="Search Pulse..."
-      >
-
-
-      <button
-        class="primary"
-        onclick="searchPulse()"
-      >
-        Search
-      </button>
-
-
-      <p id="searchResult"></p>
-
-    </div>
-
-  </section>
-
-
-
-  <!-- ========================= -->
-  <!-- CREATE -->
-  <!-- ========================= -->
-
-  <section
-    id="create"
-    class="screen"
+    ⬆️ Upload Video
+  </button>
+  <p id="message"></p>
+</div>
+  </div>
+</section>
+<!-- PROFILE -->
+<section id="profile" class="screen">
+  <!-- LOGGED OUT -->
+  <div id="loggedOutView" class="auth-box">
+<h2>Welcome to Pulse 🔥</h2>
+<p>
+  Create your account or log in to continue.
+</p>
+<div class="card">
+  <input
+    type="email"
+    id="authEmail"
+    placeholder="Email address"
+    autocomplete="email"
   >
-
-    <h2>
-      Create 🎬
-    </h2>
-
-
-    <div class="card">
-
-      <div class="upload-box">
-
-        <h3>
-          Upload your video
-        </h3>
-
-        <br>
-
-
-        <input
-          type="file"
-          id="videoFile"
-          accept="video/*"
-        >
-
-
-        <textarea
-          id="caption"
-          placeholder="Write a caption..."
-        ></textarea>
-
-
-        <button
-          class="primary"
-          onclick="uploadVideo()"
-        >
-          Upload Video
-        </button>
-
-
-        <p id="message"></p>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-
-  <!-- ========================= -->
-  <!-- PROFILE / LOGIN -->
-  <!-- ========================= -->
-
-  <section
-    id="profile"
-    class="screen"
+  <input
+    type="password"
+    id="authPassword"
+    placeholder="Password"
+    autocomplete="current-password"
   >
-
-
-    <!-- NOT LOGGED IN -->
-
-    <div
-      id="loggedOutView"
-      class="auth-box"
-    >
-
-      <h2>
-        Welcome to Pulse 🔥
-      </h2>
-
-
-      <p>
-        Create your account or log in
-        to continue.
-      </p>
-
-
-      <div class="card">
-
-
-        <input
-          type="email"
-          id="authEmail"
-          placeholder="Email address"
-          autocomplete="email"
-        >
-
-
-        <input
-          type="password"
-          id="authPassword"
-          placeholder="Password"
-          autocomplete="current-password"
-        >
-
-
-        <button
-          class="primary"
-          onclick="signUp()"
-        >
-          Create Account
-        </button>
-
-
-        <button
-          class="secondary"
-          onclick="login()"
-        >
-          Log In
-        </button>
-
-
-        <p
-          id="authMessage"
-          class="auth-message"
-        ></p>
-
-
-      </div>
-
+  <button
+    class="primary"
+    onclick="signUp()"
+  >
+    Create Account
+  </button>
+  <button
+    class="secondary"
+    onclick="login()"
+  >
+    Log In
+  </button>
+  <p
+    id="authMessage"
+    class="auth-message"
+  ></p>
+</div>
+  </div>
+  <!-- LOGGED IN -->
+  <div
+    id="loggedInView"
+    class="profile-box"
+    style="display:none;"
+  >
+<div class="avatar">P</div>
+<h2>@pulseuser</h2>
+<p id="userEmail" class="user-email"></p>
+<div class="card">
+  <h3>My Pulse</h3>
+  <div class="stats">
+    <div>
+      <strong id="videoCount">0</strong>
+      <span>Videos</span>
     </div>
-
-
-
-    <!-- LOGGED IN -->
-
-    <div
-      id="loggedInView"
-      class="profile-box"
-      style="display:none;"
-    >
-
-
-      <div class="avatar">
-        P
-      </div>
-
-
-      <h2>
-        @pulseuser
-      </h2>
-
-
-      <p
-        id="userEmail"
-        class="user-email"
-      ></p>
-
-
-      <div class="card">
-
-        <h3>
-          My Pulse
-        </h3>
-
-
-        <div class="stats">
-
-          <div>
-            <strong>0</strong>
-            <span>Videos</span>
-          </div>
-
-
-          <div>
-            <strong>0</strong>
-            <span>Followers</span>
-          </div>
-
-
-          <div>
-            <strong>0</strong>
-            <span>Following</span>
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <button
-        class="secondary"
-        onclick="logout()"
-      >
-        Log Out
-      </button>
-
-
+    <div>
+      <strong>0</strong>
+      <span>Followers</span>
     </div>
+    <div>
+      <strong>0</strong>
+      <span>Following</span>
+    </div>
+  </div>
+</div>
+<button
+  class="secondary"
+  onclick="logout()"
+>
+  Log Out
+</button>
+  </div>
+</section>
+<!-- NAVIGATION -->
+<nav>
 
-  </section>
+<button
+onclick=“showScreen(‘home’, this)”
+class=“active”
 
+🏠<br>
+Home
+  </button>
 
+<button
+onclick=“showScreen(‘search’, this)”
 
-  <!-- ========================= -->
-  <!-- NAVIGATION -->
-  <!-- ========================= -->
+🔎<br>
+Search
+  </button>
 
-  <nav>
+<button
+onclick=“showScreen(‘create’, this)”
+class=“plus”
 
++
+  </button>
 
-    <button
-      onclick="showScreen('home', this)"
-      class="active"
-    >
-      🏠<br>
-      Home
-    </button>
+<button
+onclick=“showScreen(‘profile’, this)”
 
-
-    <button
-      onclick="showScreen('search', this)"
-    >
-      🔎<br>
-      Search
-    </button>
-
-
-    <button
-      onclick="showScreen('create', this)"
-      class="plus"
-    >
-      +
-    </button>
-
-
-    <button
-      onclick="showScreen('profile', this)"
-    >
-      👤<br>
-      Profile
-    </button>
-
-
-  </nav>
-
-
-
-  <!-- ========================= -->
-  <!-- SUPABASE -->
-  <!-- ========================= -->
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-  <script>
-
-
-    const SUPABASE_URL =
-      "https://hifggxfzjbtsjpqhconv.supabase.co";
-
-
-    const SUPABASE_KEY =
-      "sb_publishable_VBtr_LcUsMKEglxDC9M_7w_Lde0mdun";
-
-
-    const supabaseClient =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-      );
-
-
-
-    /* =========================
-       NAVIGATION
-       ========================= */
-
-    function showScreen(
-      screenName,
-      button
-    ) {
-
-      document
-        .querySelectorAll(".screen")
-        .forEach(screen => {
-
-          screen.classList.remove(
-            "active"
-          );
-
-        });
-
-
-      const screen =
-        document.getElementById(
-          screenName
+👤<br>
+Profile
+  </button>
+</nav>
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL =
+  "https://hifggxfzjbtsjpqhconv.supabase.co";
+const SUPABASE_KEY =
+  "sb_publishable_VBtr_LcUsMKEglxDC9M_7w_Lde0mdun";
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+/* =========================
+   NAVIGATION
+========================= */
+function showScreen(screenName, button){
+  document
+    .querySelectorAll(".screen")
+    .forEach(screen => {
+      screen.classList.remove("active");
+    });
+  const screen =
+    document.getElementById(screenName);
+  if(screen){
+    screen.classList.add("active");
+  }
+  document
+    .querySelectorAll("nav button")
+    .forEach(btn => {
+      btn.classList.remove("active");
+    });
+  if(button){
+    button.classList.add("active");
+  }
+  if(screenName === "home"){
+    loadVideos();
+  }
+}
+/* =========================
+   VIDEO PREVIEW
+========================= */
+function previewVideo(){
+  const input =
+    document.getElementById("videoFile");
+  const preview =
+    document.getElementById("videoPreview");
+  const fileName =
+    document.getElementById("fileName");
+  const file = input.files[0];
+  if(!file){
+    preview.style.display = "none";
+    fileName.innerText = "";
+    return;
+  }
+  fileName.innerText =
+    "Selected: " + file.name;
+  const url =
+    URL.createObjectURL(file);
+  preview.src = url;
+  preview.style.display = "block";
+}
+/* =========================
+   UPLOAD VIDEO
+========================= */
+async function uploadVideo(){
+  const file =
+    document
+      .getElementById("videoFile")
+      .files[0];
+  const caption =
+    document
+      .getElementById("caption")
+      .value
+      .trim();
+  const message =
+    document.getElementById("message");
+  if(!file){
+    message.innerText =
+      "Please choose a video first.";
+    return;
+  }
+  if(!file.type.startsWith("video/")){
+    message.innerText =
+      "Please choose a video file.";
+    return;
+  }
+  const {
+    data: sessionData
+  } =
+    await supabaseClient.auth.getSession();
+  const session =
+    sessionData.session;
+  if(!session){
+    message.innerText =
+      "Please log in before uploading a video.";
+    showScreen(
+      "profile",
+      document.querySelectorAll("nav button")[3]
+    );
+    return;
+  }
+  message.innerText =
+    "Uploading your video... ⏳";
+  try{
+    const extension =
+      file.name.split(".").pop();
+    const safeExtension =
+      extension
+        ? extension.toLowerCase()
+        : "mp4";
+    const filePath =
+      session.user.id +
+      "/" +
+      Date.now() +
+      "-" +
+      Math.random()
+        .toString(36)
+        .substring(2,8) +
+      "." +
+      safeExtension;
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .storage
+        .from("Videos")
+        .upload(
+          filePath,
+          file,
+          {
+            cacheControl:"3600",
+            upsert:false,
+            contentType:file.type
+          }
         );
-
-
-      if (screen) {
-
-        screen.classList.add(
-          "active"
-        );
-
-      }
-
-
-      document
-        .querySelectorAll("nav button")
-        .forEach(btn => {
-
-          btn.classList.remove(
-            "active"
-          );
-
-        });
-
-
-      if (button) {
-
-        button.classList.add(
-          "active"
-        );
-
-      }
-
-    }
-
-
-
-    /* =========================
-       LIKE
-       ========================= */
-
-    function likePost(button) {
-
-      let number =
-        parseInt(
-          button.innerText.match(/\d+/)[0]
-        );
-
-
-      number++;
-
-
-      button.innerText =
-        "❤️ " + number;
-
-    }
-
-
-
-    /* =========================
-       COMMENT
-       ========================= */
-
-    function commentPost() {
-
-      const comment =
-        prompt(
-          "Write your comment:"
-        );
-
-
-      if (comment) {
-
-        alert(
-          "Comment added: " +
-          comment
-        );
-
-      }
-
-    }
-
-
-
-    /* =========================
-       SHARE
-       ========================= */
-
-    async function sharePost() {
-
-      if (navigator.share) {
-
-        try {
-
-          await navigator.share({
-
-            title: "Pulse",
-
-            text:
-              "Check out this video on Pulse!"
-
-          });
-
-        } catch (error) {
-
-          console.log(
-            "Share cancelled."
-          );
-
-        }
-
-      } else {
-
-        alert(
-          "Sharing is not supported on this browser."
-        );
-
-      }
-
-    }
-
-
-
-    /* =========================
-       SEARCH
-       ========================= */
-
-    function searchPulse() {
-
-      const value =
-        document
-          .getElementById(
-            "searchInput"
-          )
-          .value
-          .trim();
-
-
-      const result =
-        document.getElementById(
-          "searchResult"
-        );
-
-
-      if (!value) {
-
-        result.innerText =
-          "Type something to search.";
-
-        return;
-
-      }
-
-
-      result.innerText =
-        "Searching Pulse for: " +
-        value;
-
-    }
-
-
-
-    /* =========================
-       VIDEO UPLOAD
-       ========================= */
-
-    function uploadVideo() {
-
-      const file =
-        document
-          .getElementById(
-            "videoFile"
-          )
-          .files[0];
-
-
-      const caption =
-        document
-          .getElementById(
-            "caption"
-          )
-          .value;
-
-
-      const message =
-        document.getElementById(
-          "message"
-        );
-
-
-      if (!file) {
-
-        message.innerText =
-          "Please choose a video first.";
-
-        return;
-
-      }
-
-
+    if(error){
+      console.error(error);
       message.innerText =
-        "Video selected successfully! 🔥";
-
-
-      console.log(
-        "Video:",
-        file.name
-      );
-
-
-      console.log(
-        "Caption:",
-        caption
-      );
-
+        "Upload failed: " +
+        error.message;
+      return;
     }
-
-
-
-    /* =========================
-       SIGN UP
-       ========================= */
-
-    async function signUp() {
-
-      const email =
-        document
-          .getElementById(
-            "authEmail"
-          )
-          .value
-          .trim();
-
-
-      const password =
-        document
-          .getElementById(
-            "authPassword"
-          )
-          .value;
-
-
-      const message =
-        document.getElementById(
-          "authMessage"
-        );
-
-
-      if (!email || !password) {
-
-        message.innerText =
-          "Please enter your email and password.";
-
-        return;
-
-      }
-
-
-      if (password.length < 6) {
-
-        message.innerText =
-          "Password must be at least 6 characters.";
-
-        return;
-
-      }
-
-
-      message.innerText =
-        "Creating your Pulse account...";
-
-
-      try {
-
-        const {
-          data,
-          error
-        } =
-          await supabaseClient.auth.signUp({
-
-            email: email,
-
-            password: password
-
-          });
-
-
-        if (error) {
-
-          message.innerText =
-            error.message;
-
-          return;
-
-        }
-
-
-        if (data.session) {
-
-          message.innerText =
-            "Account created successfully! 🔥";
-
-
-          updateAuthUI(
-            data.user
-          );
-
-
-        } else {
-
-          message.innerText =
-            "Account created! Check your email to confirm your account.";
-
-        }
-
-
-      } catch (error) {
-
-        message.innerText =
-          "Something went wrong. Please try again.";
-
-        console.error(
-          error
-        );
-
-      }
-
-    }
-
-
-
-    /* =========================
-       LOGIN
-       ========================= */
-
-    async function login() {
-
-      const email =
-        document
-          .getElementById(
-            "authEmail"
-          )
-          .value
-          .trim();
-
-
-      const password =
-        document
-          .getElementById(
-            "authPassword"
-          )
-          .value;
-
-
-      const message =
-        document.getElementById(
-          "authMessage"
-        );
-
-
-      if (!email || !password) {
-
-        message.innerText =
-          "Please enter your email and password.";
-
-        return;
-
-      }
-
-
-      message.innerText =
-        "Logging in...";
-
-
-      try {
-
-        const {
-          data,
-          error
-        } =
-          await supabaseClient.auth
-            .signInWithPassword({
-
-              email:
-                email,
-
-              password:
-                password
-
-            });
-
-
-        if (error) {
-
-          message.innerText =
-            error.message;
-
-          return;
-
-        }
-
-
-        message.innerText =
-          "Login successful! 🔥";
-
-
-        updateAuthUI(
-          data.user
-        );
-
-
-      } catch (error) {
-
-        message.innerText =
-          "Something went wrong. Please try again.";
-
-        console.error(
-          error
-        );
-
-      }
-
-    }
-
-
-
-    /* =========================
-       LOGOUT
-       ========================= */
-
-    async function logout() {
-
-      const {
-        error
-      } =
-        await supabaseClient.auth
-          .signOut();
-
-
-      if (error) {
-
-        alert(
-          error.message
-        );
-
-        return;
-
-      }
-
-
-      updateAuthUI(
-        null
-      );
-
-
+    const {
+      data: publicData
+    } =
+      supabaseClient
+        .storage
+        .from("Videos")
+        .getPublicUrl(filePath);
+    const videoUrl =
+      publicData.publicUrl;
+    message.innerText =
+      "Video uploaded successfully! 🔥";
+    addVideoToFeed(
+      videoUrl,
+      caption,
+      session.user.email
+    );
+    document
+      .getElementById("videoFile")
+      .value = "";
+    document
+      .getElementById("caption")
+      .value = "";
+    document
+      .getElementById("videoPreview")
+      .style.display = "none";
+    document
+      .getElementById("fileName")
+      .innerText = "";
+    setTimeout(() => {
       showScreen(
         "home",
-        document.querySelector(
-          "nav button"
-        )
+        document.querySelector("nav button")
       );
-
+    },1200);
+  }catch(error){
+    console.error(error);
+    message.innerText =
+      "Something went wrong during upload.";
+  }
+}
+/* =========================
+   LOAD VIDEOS
+========================= */
+async function loadVideos(){
+  const feed =
+    document.getElementById("feed");
+  feed.innerHTML =
+    '<div class="loading">Loading Pulse videos...</div>';
+  try{
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .storage
+        .from("Videos")
+        .list(
+          "",
+          {
+            limit:100,
+            sortBy:{
+              column:"created_at",
+              order:"desc"
+            }
+          }
+        );
+    if(error){
+      console.error(error);
+      feed.innerHTML =
+        '<div class="empty">Unable to load videos.</div>';
+      return;
     }
-
-
-
-    /* =========================
-       UPDATE PROFILE
-       ========================= */
-
-    function updateAuthUI(user) {
-
-      const loggedOutView =
-        document.getElementById(
-          "loggedOutView"
-        );
-
-
-      const loggedInView =
-        document.getElementById(
-          "loggedInView"
-        );
-
-
-      const userEmail =
-        document.getElementById(
-          "userEmail"
-        );
-
-
-      if (user) {
-
-        loggedOutView.style.display =
-          "none";
-
-
-        loggedInView.style.display =
-          "block";
-
-
-        userEmail.innerText =
-          user.email;
-
-
-      } else {
-
-        loggedOutView.style.display =
-          "block";
-
-
-        loggedInView.style.display =
-          "none";
-
-
-        userEmail.innerText =
-          "";
-
-      }
-
+    if(!data || data.length === 0){
+      feed.innerHTML = `
+        <div class="empty">
+          No videos yet. 🎥<br><br>
+          Be the first person to upload a video to Pulse!
+        </div>
+      `;
+      return;
     }
-
-
-
-    /* =========================
-       CHECK LOGIN
-       ========================= */
-
-    async function checkLogin() {
-
-      const {
-        data
-      } =
-        await supabaseClient.auth
-          .getSession();
-
-
-      if (data.session) {
-
-        updateAuthUI(
-          data.session.user
+    feed.innerHTML = "";
+    data
+      .filter(item => item.name)
+      .forEach(item => {
+        const path =
+          item.name;
+        const {
+          data: publicData
+        } =
+          supabaseClient
+            .storage
+            .from("Videos")
+            .getPublicUrl(path);
+        addVideoToFeed(
+          publicData.publicUrl,
+          "",
+          "@pulseuser"
         );
-
-      } else {
-
-        updateAuthUI(
-          null
-        );
-
-      }
-
-    }
-
-
-
-    /* =========================
-       WATCH AUTH CHANGES
-       ========================= */
-
-    supabaseClient.auth
-      .onAuthStateChange(
-        (event, session) => {
-
-          updateAuthUI(
-            session
-              ? session.user
-              : null
-          );
-
-        }
+      });
+  }catch(error){
+    console.error(error);
+    feed.innerHTML =
+      '<div class="empty">Could not load videos.</div>';
+  }
+}
+/* =========================
+   ADD VIDEO TO FEED
+========================= */
+function addVideoToFeed(
+  videoUrl,
+  caption,
+  email
+){
+  const feed =
+    document.getElementById("feed");
+  if(
+    feed.innerText.includes(
+      "No videos yet"
+    ) ||
+    feed.innerText.includes(
+      "Loading Pulse"
+    )
+  ){
+    feed.innerHTML = "";
+  }
+  const card =
+    document.createElement("div");
+  card.className =
+    "feed-card";
+  card.innerHTML = `
+    <video
+      class="feed-video"
+      src="${videoUrl}"
+      controls
+      playsinline
+      preload="metadata"
+    ></video>
+    <div class="feed-info">
+      <div class="username">
+        ${email || "@pulseuser"}
+      </div>
+      <div class="caption">
+        ${caption || "Welcome to Pulse! 🔥"}
+      </div>
+      <div class="actions">
+        <button onclick="likePost(this)">
+          ❤️ 0
+        </button>
+        <button onclick="commentPost()">
+          💬 Comment
+        </button>
+        <button onclick="shareVideo('${videoUrl}')">
+          ↗️ Share
+        </button>
+      </div>
+    </div>
+  `;
+  feed.prepend(card);
+}
+/* =========================
+   LIKE
+========================= */
+function likePost(button){
+  let number =
+    parseInt(
+      button.innerText.match(/\d+/)[0]
+    );
+  number++;
+  button.innerText =
+    "❤️ " + number;
+}
+/* =========================
+   COMMENT
+========================= */
+function commentPost(){
+  const comment =
+    prompt("Write your comment:");
+  if(comment){
+    alert(
+      "Comment added: " +
+      comment
+    );
+  }
+}
+/* =========================
+   SHARE
+========================= */
+async function shareVideo(videoUrl){
+  if(navigator.share){
+    try{
+      await navigator.share({
+        title:"Pulse",
+        text:"Check out this video on Pulse!",
+        url:videoUrl
+      });
+    }catch(error){
+      console.log(
+        "Share cancelled."
       );
-
-
-
-    /* =========================
-       START PULSE
-       ========================= */
-
-    checkLogin();
-
-
-  </script>
-
-
+    }
+  }else{
+    try{
+      await navigator.clipboard.writeText(
+        videoUrl
+      );
+      alert(
+        "Video link copied! 🔗"
+      );
+    }catch(error){
+      alert(
+        "Sharing is not supported on this browser."
+      );
+    }
+  }
+}
+/* =========================
+   SEARCH
+========================= */
+function searchPulse(){
+  const value =
+    document
+      .getElementById("searchInput")
+      .value
+      .trim();
+  const result =
+    document.getElementById(
+      "searchResult"
+    );
+  if(!value){
+    result.innerText =
+      "Type something to search.";
+    return;
+  }
+  result.innerText =
+    "Searching Pulse for: " +
+    value;
+}
+/* =========================
+   SIGN UP
+========================= */
+async function signUp(){
+  const email =
+    document
+      .getElementById("authEmail")
+      .value
+      .trim();
+  const password =
+    document
+      .getElementById("authPassword")
+      .value;
+  const message =
+    document.getElementById(
+      "authMessage"
+    );
+  if(!email || !password){
+    message.innerText =
+      "Please enter your email and password.";
+    return;
+  }
+  if(password.length < 6){
+    message.innerText =
+      "Password must be at least 6 characters.";
+    return;
+  }
+  message.innerText =
+    "Creating your Pulse account...";
+  try{
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth.signUp({
+        email:email,
+        password:password
+      });
+    if(error){
+      message.innerText =
+        error.message;
+      return;
+    }
+    if(data.session){
+      message.innerText =
+        "Account created successfully! 🔥";
+      updateAuthUI(
+        data.user
+      );
+    }else{
+      message.innerText =
+        "Account created! Check your email to confirm your account.";
+    }
+  }catch(error){
+    console.error(error);
+    message.innerText =
+      "Something went wrong. Please try again.";
+  }
+}
+/* =========================
+   LOGIN
+========================= */
+async function login(){
+  const email =
+    document
+      .getElementById("authEmail")
+      .value
+      .trim();
+  const password =
+    document
+      .getElementById("authPassword")
+      .value;
+  const message =
+    document.getElementById(
+      "authMessage"
+    );
+  if(!email || !password){
+    message.innerText =
+      "Please enter your email and password.";
+    return;
+  }
+  message.innerText =
+    "Logging in...";
+  try{
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth
+        .signInWithPassword({
+          email:email,
+          password:password
+        });
+    if(error){
+      message.innerText =
+        error.message;
+      return;
+    }
+    message.innerText =
+      "Login successful! 🔥";
+    updateAuthUI(
+      data.user
+    );
+    setTimeout(() => {
+      showScreen(
+        "home",
+        document.querySelector("nav button")
+      );
+    },500);
+  }catch(error){
+    console.error(error);
+    message.innerText =
+      "Something went wrong. Please try again.";
+  }
+}
+/* =========================
+   LOGOUT
+========================= */
+async function logout(){
+  const {
+    error
+  } =
+    await supabaseClient.auth
+      .signOut();
+  if(error){
+    alert(error.message);
+    return;
+  }
+  updateAuthUI(null);
+  showScreen(
+    "home",
+    document.querySelector("nav button")
+  );
+}
+/* =========================
+   UPDATE PROFILE
+========================= */
+function updateAuthUI(user){
+  const loggedOutView =
+    document.getElementById(
+      "loggedOutView"
+    );
+  const loggedInView =
+    document.getElementById(
+      "loggedInView"
+    );
+  const userEmail =
+    document.getElementById(
+      "userEmail"
+    );
+  if(user){
+    loggedOutView.style.display =
+      "none";
+    loggedInView.style.display =
+      "block";
+    userEmail.innerText =
+      user.email || "";
+  }else{
+    loggedOutView.style.display =
+      "block";
+    loggedInView.style.display =
+      "none";
+    userEmail.innerText =
+      "";
+  }
+}
+/* =========================
+   CHECK LOGIN
+========================= */
+async function checkLogin(){
+  const {
+    data
+  } =
+    await supabaseClient.auth
+      .getSession();
+  if(data.session){
+    updateAuthUI(
+      data.session.user
+    );
+  }else{
+    updateAuthUI(null);
+  }
+}
+/* =========================
+   AUTH CHANGES
+========================= */
+supabaseClient.auth
+  .onAuthStateChange(
+    (event,session) => {
+      updateAuthUI(
+        session
+          ? session.user
+          : null
+      );
+    }
+  );
+/* =========================
+   START PULSE
+========================= */
+checkLogin();
+loadVideos();
+</script>
 </body>
-
 </html>
